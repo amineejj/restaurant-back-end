@@ -16,6 +16,7 @@ class CreatePlatsTable extends Migration
         Schema::create('plats', function (Blueprint $table) {
             $table->id();
             $table->string('nom');
+            $table->string('categorie');
             $table->string('description');
             $table->string('image');
             $table->double('prix', 5,2);

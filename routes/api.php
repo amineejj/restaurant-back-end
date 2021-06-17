@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\PlatController;
+use App\Http\Controllers\AuthController;
 use App\Models\Plat;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -16,9 +17,20 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::resource('plat', PlatController::class);
+Route::post('register', [AuthController::class, 'register']);
+Route::post('login', [AuthController::class, 'login']);
 
-Route::get('plat/search/{nom}', [PlatController::class, 'search']);
+Route::middleware(['auth:clients'])->group(function () {
+    Route::get('plat/search/{nom}', [PlatController::class, 'search']);
+    Route::get('plat', [PlatController::class, 'index']);
+    Route::post('logout', [AuthController::class, 'logout']);
+});
+
+Route::middleware(['auth:admins'])->group(function () {
+    Route::get('plat/search/{nom}', [PlatController::class, 'search']);
+    Route::resource('plat', PlatController::class);
+    Route::post('logout', [AuthController::class, 'logout']);
+});
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();

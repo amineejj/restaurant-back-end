@@ -11,6 +11,7 @@ class Plat extends Model
     protected $fillable = [
         'nom',
         'image',
+        'categorie',
         'description',
         'prix'
     ];
