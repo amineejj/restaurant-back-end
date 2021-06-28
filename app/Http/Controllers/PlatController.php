@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Panier;
 use App\Models\Plat;
 use Illuminate\Http\Request;
 
@@ -75,8 +76,30 @@ class PlatController extends Controller
      * @param  string  $nom
      * @return \Illuminate\Http\Response
      */
-    public function search($name)
+    public function search($nom)
     {
-        return Plat::where('nom', 'like', '%'. $name .'%')->get();
+        return Plat::where('nom', 'like', '%'. $nom .'%')->get();
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function addToCart(Request $request, $id)
+    {
+        $plat = Plat::find($id);
+        $panierTemp = $request->session()->has('panier') ? 
+                        $request->session()->get('panier') : null;
+        
+        $panier = new Panier($panierTemp);
+        $panier->addPlat($plat, $plat->$id);
+        $request->session()->put('panier', $panier);
+        // $request->session()->forget('panier');
+        return response([
+            'panier' => $panier
+        ], 200);
     }
 }

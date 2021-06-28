@@ -21,14 +21,16 @@ Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
 
 Route::middleware(['auth:clients'])->group(function () {
-    Route::get('plat/search/{nom}', [PlatController::class, 'search']);
-    Route::get('plat', [PlatController::class, 'index']);
-    Route::post('logout', [AuthController::class, 'logout']);
+    Route::get('plat/add/{id}', [PlatController::class, 'addToCart']);
 });
 
 Route::middleware(['auth:admins'])->group(function () {
-    Route::get('plat/search/{nom}', [PlatController::class, 'search']);
     Route::resource('plat', PlatController::class);
+});
+
+Route::middleware(['auth:users'])->group(function () {
+    Route::get('plat', [PlatController::class, 'index']);
+    Route::get('plat/search/{nom}', [PlatController::class, 'search']);
     Route::post('logout', [AuthController::class, 'logout']);
 });
 

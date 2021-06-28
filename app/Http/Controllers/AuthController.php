@@ -21,7 +21,7 @@ class AuthController extends Controller
             'password' => 'required|string|confirmed',
         ]);
 
-        $user = User::create([
+        $client = Client::create([
             'nom' => $fields['nom'],
             'prenom' => $fields['prenom'],
             'adresse' => $fields['adresse'],
@@ -31,9 +31,9 @@ class AuthController extends Controller
             'role' => 'client'
         ]);
 
-        $token = $user->createToken('myapptoken')->plainTextToken;
+        $token = $client->createToken('myapptoken')->plainTextToken;
         $response = [
-            'user' => $user,
+            'client' => $client,
             'token' => $token
         ];
         
@@ -83,7 +83,7 @@ class AuthController extends Controller
     
             $token = $admin->createToken('myapptoken')->plainTextToken;
             $response = [
-                'admin' => $admin,
+                'user' => $admin,
                 'token' => $token
             ];
         }
